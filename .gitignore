@@ -1,3 +1,8 @@
 /.idea
-/src/model.pkl
+/app/src/model.pkl
 /environment
+/model_training/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv
+/app/test/model.pkl
+/app/src/__init__.py
+/app/test/__init__.py
+*__init__.py
