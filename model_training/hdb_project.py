@@ -130,5 +130,5 @@ model.score(X_test, y_test)
 
 
 
-with open("../app/src/model.pkl", "wb") as f:
+with open("../model.pkl", "wb") as f:
   pickle.dump(model,f)

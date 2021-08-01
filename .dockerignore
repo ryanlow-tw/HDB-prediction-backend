@@ -1,0 +1,4 @@
+/.idea
+/.environment
+/model_training
+.gitignore
