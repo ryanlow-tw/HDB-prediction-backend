@@ -3,11 +3,7 @@ Activate virtual environment
 ```bash
 source ./environment/bin/activate
 ```
-
-
 #### Running tests:
-
-from /src folder,
 
 ```bash
 python -m unittest
