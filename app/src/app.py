@@ -1,14 +1,13 @@
 from flask import Flask, request
 from model import PredModel
+from make_json import MakeJson
 
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
-model = PredModel("model.pkl")
-model.load_model()
-
-random_forest_model = model.model
+random_forest = PredModel("model.pkl")
+random_forest.load_model()
 
 
 @app.route('/')
@@ -18,25 +17,19 @@ def index():
 
 @app.route('/default-prediction')
 def prediction():
-    default_prediction = model.get_default_prediction()
+    default_prediction = random_forest.get_default_prediction()
     return f"$ {default_prediction:.2f}"
 
 
 @app.route('/make-prediction')
 def make_prediction():
 
-    valid_args = {
-        "storey-range": "",
-        "floor-area-sqm": "",
-        "remaining-lease": "",
-        "town": ""
-    }
-
     query_strings = request.args.to_dict()
 
-    for key, value in query_strings.items():
+    prediction_params = PredModel.get_prediction_params(query_strings)
 
-        if key in valid_args:
-            valid_args[key] = value
+    result = random_forest.make_prediction(prediction_params)
 
-    return valid_args
+    display_results = MakeJson.format_results(result)
+
+    return display_results

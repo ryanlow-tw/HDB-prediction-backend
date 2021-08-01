@@ -1,6 +1,6 @@
 from model import PredModel
 from make_json import MakeJson
-from unittest import TestCase, skip
+from unittest import TestCase
 
 
 class TestModel(TestCase):
@@ -50,4 +50,99 @@ class TestModel(TestCase):
         exception = error.exception
         self.assertEqual(f"{exception}", f"{town} is not a valid town name!")
 
+    def test_that_storey_range_is_correct_for_1_to_6_floors(self):
 
+        prediction_params = {
+            "storey-range": "1",
+            "floor-area-sqm": "75",
+            "remaining-lease": "64",
+            "town": "PUNGGOL"
+        }
+
+        valid_args = PredModel.process_query_strings(prediction_params)
+
+        result = PredModel.get_floor_mapping(valid_args)
+        expected = 0
+
+        self.assertEqual(result, expected)
+
+    def test_that_storey_range_is_correct_for_7_floors(self):
+
+        prediction_params = {
+            "storey-range": "7",
+            "floor-area-sqm": "75",
+            "remaining-lease": "64",
+            "town": "PUNGGOL"
+        }
+
+        valid_args = PredModel.process_query_strings(prediction_params)
+
+        result = PredModel.get_floor_mapping(valid_args)
+        expected = 1
+
+        self.assertEqual(result, expected)
+
+    def test_that_storey_range_is_correct_for_12_floors(self):
+
+        prediction_params = {
+            "storey-range": "12",
+            "floor-area-sqm": "75",
+            "remaining-lease": "64",
+            "town": "PUNGGOL"
+        }
+
+        valid_args = PredModel.process_query_strings(prediction_params)
+
+        result = PredModel.get_floor_mapping(valid_args)
+        expected = 1
+
+        self.assertEqual(result, expected)
+
+    def test_that_storey_range_is_correct_for_13_floors(self):
+
+        prediction_params = {
+            "storey-range": "13",
+            "floor-area-sqm": "75",
+            "remaining-lease": "64",
+            "town": "PUNGGOL"
+        }
+
+        valid_args = PredModel.process_query_strings(prediction_params)
+
+        result = PredModel.get_floor_mapping(valid_args)
+        expected = 2
+
+        self.assertEqual(result, expected)
+
+    def test_that_error_is_raised_if_floor_is_negative(self):
+
+        prediction_params = {
+            "storey-range": "-1",
+            "floor-area-sqm": "75",
+            "remaining-lease": "64",
+            "town": "PUNGGOL"
+        }
+
+        valid_args = PredModel.process_query_strings(prediction_params)
+
+        with self.assertRaises(ValueError) as error:
+            PredModel.get_floor_mapping(valid_args)
+
+        exception = error.exception
+        self.assertEqual(f"{exception}","Storey-range cannot be less than 1!")
+
+    def test_number_of_prediction_parameters_is_29(self):
+
+        prediction_params = {
+            "storey-range": "13",
+            "floor-area-sqm": "75",
+            "remaining-lease": "64",
+            "town": "PUNGGOL"
+        }
+
+        valid_args = PredModel.process_query_strings(prediction_params)
+
+        result = len(PredModel.get_prediction_params(valid_args))
+        expected = 29
+
+        self.assertEqual(result, expected)

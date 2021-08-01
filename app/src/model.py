@@ -54,15 +54,60 @@ class PredModel:
 
     @staticmethod
     def _get_town_col_number(town):
+        print(town)
         if f"town_{town}" not in PredModel.remaining_column_names:
             raise ValueError(f"{town} is not a valid town name!")
 
         return PredModel.remaining_column_names.index(f"town_{town}") + len(PredModel.column_names)
 
-    #def get_model_prediction(self, **kwargs):
+    @staticmethod
+    def get_prediction_params(flat_details):
 
+        valid_args = PredModel.process_query_strings(flat_details)
 
+        prediction_params = [PredModel.get_floor_mapping(valid_args)]
 
+        prediction_params.extend([valid_args["floor-area-sqm"], valid_args["remaining-lease"]])
 
+        prediction_params.extend([0] * len(PredModel.remaining_column_names))
 
+        town_col = PredModel._get_town_col_number(valid_args["town"])
 
+        prediction_params[town_col] = 1
+
+        return prediction_params
+
+    @staticmethod
+    def get_floor_mapping(flat_details):
+
+        if flat_details["storey-range"] < 0:
+            raise ValueError("Storey-range cannot be less than 1!")
+        elif 7 > flat_details["storey-range"] > 0:
+            return 0
+        elif 6 < flat_details["storey-range"] < 13:
+            return 1
+        return 2
+
+    @staticmethod
+    def process_query_strings(query_strings):
+
+        valid_args = {
+            "storey-range": "",
+            "floor-area-sqm": "",
+            "remaining-lease": "",
+            "town": ""
+        }
+
+        for key, value in query_strings.items():
+
+            if key in valid_args:
+                if key != "town":
+                    valid_args[key] = int(value)
+                else:
+                    valid_args[key] = value
+
+        return valid_args
+
+    def make_prediction(self, prediction_params):
+
+        return self.model.predict([prediction_params])[0]
