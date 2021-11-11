@@ -52,7 +52,7 @@ def get_floor_range_from_quantile(quantile):
       return floor_ranges[index + 1]
 
 
-floor_quantiles = list(map(get_floor_range_from_quantile, quantiles))
+floor_quantiles = map(get_floor_range_from_quantile, quantiles)
 
 floor_ranges = sorted(list(floor_counts.keys()))
 
