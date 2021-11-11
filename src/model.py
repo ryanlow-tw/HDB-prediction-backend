@@ -64,7 +64,7 @@ class PredModel:
         return PredModel.remaining_column_names.index(f"town_{town}") + len(PredModel.column_names)
 
     @staticmethod
-    def get_prediction_params(flat_details: dict) -> list[int]:
+    def get_prediction_params(flat_details):
 
         valid_args = PredModel.process_query_strings(flat_details)
 
@@ -111,6 +111,6 @@ class PredModel:
 
         return valid_args
 
-    def make_prediction(self, prediction_params: list[int]) -> np.float64:
+    def make_prediction(self, prediction_params) -> np.float64:
 
         return self.model.predict([prediction_params])[0]
