@@ -35,24 +35,20 @@ flats_df.info()
 """Let's get the flats only in 2021 because if we predict prices,  we don't want outdated data..."""
 
 flats_2021_df = flats_df[flats_df['month'].str.split('-', expand=True)[0] == "2021"]
-flats_2021_df
 
 """Check whether the unique values are not overlapping"""
 
 sorted(flats_2021_df['storey_range'].unique())
 
 floor_counts = dict(flats_2021_df['storey_range'].value_counts())
-floor_counts
 
 x = sorted(list(floor_counts.keys()))
 y = [floor_counts[floor_range] for floor_range in x]
 
-print(x)
 
 numbers = list(range(len(flats_2021_df)))
 
 quantiles = np.round(np.percentile(numbers, [25, 75])).astype(int)
-quantiles
 
 def get_floor_range_from_quantile(quantile):
   sum = 0
@@ -67,8 +63,6 @@ def get_floor_range_from_quantile(quantile):
 
 floor_quantiles = list(map(get_floor_range_from_quantile, quantiles))
 
-floor_quantiles
-
 floor_ranges = sorted(list(floor_counts.keys()))
 
 encode_dict = {}
@@ -78,52 +72,31 @@ for floor_range in floor_ranges:
     curr_encode += 1
   encode_dict[floor_range] = curr_encode
 
-encode_dict
-
 flats_storey_encoded_df = flats_2021_df.copy()
 
 flats_storey_encoded_df['storey_range'] = flats_2021_df['storey_range'].apply(lambda x: encode_dict[x])
 
 high_floor_indices = flats_2021_df[flats_2021_df['storey_range'] == "13 TO 15"].index
-high_floor_indices
 
 flats_storey_encoded_df[flats_storey_encoded_df['storey_range']== 2].index
 
 flats_storey_encoded_df.loc[high_floor_indices]['storey_range'].value_counts()
 
-flats_storey_encoded_df
-
 years_cleaned_df = flats_storey_encoded_df.copy()
 years_cleaned_df['remaining_lease'] = years_cleaned_df['remaining_lease'].apply(lambda x: x.split()[0])
-years_cleaned_df.head()
-
-years_cleaned_df
-
-years_cleaned_df.info()
-
 years_cleaned_df['remaining_lease'] = years_cleaned_df['remaining_lease'].astype(int)
 
-years_cleaned_df.info()
-
-years_cleaned_df.columns
 
 selected_features_df = years_cleaned_df[['town', 'storey_range','floor_area_sqm', 'remaining_lease']]
 
 selected_features_df.info()
 
 X = pd.get_dummies(selected_features_df)
-X
-
 y = years_cleaned_df['resale_price']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
 model = RandomForestRegressor()
 model.fit(X=X_train, y=y_train)
-
-model.score(X_test, y_test)
-
-
-
 with open("model.pkl", "wb") as f:
   pickle.dump(model,f)
