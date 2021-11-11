@@ -28,3 +28,8 @@ docker build -t ml-app .
 ```bash
 docker run -p 5000:5000 ml-app
 ```
+
+### Example query
+```html
+make-prediction?storey-range=7&floor-area-sqm=75&remaining-lease=64&town=PUNGGOL
+```
