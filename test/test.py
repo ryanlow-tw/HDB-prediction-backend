@@ -1,5 +1,5 @@
-from model import PredModel
-from make_json import MakeJson
+from src.model import PredModel
+from src.make_json import MakeJson
 from unittest import TestCase
 
 

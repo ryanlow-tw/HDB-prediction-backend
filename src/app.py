@@ -1,6 +1,10 @@
+import sys
+sys.path.append(".")
+
 from flask import Flask, request
 from model import PredModel
 from make_json import MakeJson
+
 
 
 app = Flask(__name__)
