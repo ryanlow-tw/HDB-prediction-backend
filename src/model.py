@@ -1,5 +1,8 @@
 import pickle
 
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
+
 
 class PredModel:
     storey_range_mapping = {
@@ -31,29 +34,29 @@ class PredModel:
 
     default_parameters.extend([1 if col == 'town_PUNGGOL' else 0 for col in remaining_column_names])
 
-    def __init__(self, model_path):
-        self.model_path = model_path
-        self.model = None
+    def __init__(self, model_path: str):
+        self.model_path: str = model_path
+        self.model: RandomForestRegressor = self._load_model()
 
-    def load_model(self):
+    def _load_model(self):
         with open(self.model_path, 'rb') as f:
-            self.model = pickle.load(f)
+            return pickle.load(f)
 
     @staticmethod
-    def get_default_parameters():
+    def get_default_parameters() -> list:
 
         return PredModel.default_parameters
 
-    def get_default_prediction(self):
+    def get_default_prediction(self) -> np.float64:
 
-        model_results = self.model.predict([PredModel.default_parameters])
-
-        model_result = model_results[0]
+        model_results: np.ndarray  = self.model.predict([PredModel.default_parameters])
+       
+        model_result: np.float64 = model_results[0]
 
         return model_result
 
     @staticmethod
-    def _get_town_col_number(town):
+    def _get_town_col_number(town: str) -> int:
         
         if f"town_{town}" not in PredModel.remaining_column_names:
             raise ValueError(f"{town} is not a valid town name!")
@@ -61,7 +64,7 @@ class PredModel:
         return PredModel.remaining_column_names.index(f"town_{town}") + len(PredModel.column_names)
 
     @staticmethod
-    def get_prediction_params(flat_details):
+    def get_prediction_params(flat_details: dict) -> list[int]:
 
         valid_args = PredModel.process_query_strings(flat_details)
 
@@ -74,11 +77,11 @@ class PredModel:
         town_col = PredModel._get_town_col_number(valid_args["town"])
 
         prediction_params[town_col] = 1
-
+        
         return prediction_params
 
     @staticmethod
-    def get_floor_mapping(flat_details):
+    def get_floor_mapping(flat_details: dict) -> int:
 
         if flat_details["storey-range"] < 0:
             raise ValueError("Storey-range cannot be less than 1!")
@@ -89,7 +92,7 @@ class PredModel:
         return 2
 
     @staticmethod
-    def process_query_strings(query_strings):
+    def process_query_strings(query_strings: dict) -> dict:
 
         valid_args = {
             "storey-range": "",
@@ -108,6 +111,6 @@ class PredModel:
 
         return valid_args
 
-    def make_prediction(self, prediction_params):
+    def make_prediction(self, prediction_params: list[int]) -> np.float64:
 
         return self.model.predict([prediction_params])[0]
