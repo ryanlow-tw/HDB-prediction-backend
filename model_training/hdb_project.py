@@ -10,8 +10,6 @@ IMPORTS
 """
 
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
@@ -20,7 +18,6 @@ import pickle
 """INIT"""
 
 # Commented out IPython magic to ensure Python compatibility.
-plt.style.use("ggplot")
 # %matplotlib inline
 
 """CSV analysis"""
@@ -51,8 +48,6 @@ x = sorted(list(floor_counts.keys()))
 y = [floor_counts[floor_range] for floor_range in x]
 
 print(x)
-plt.figure(figsize=(15,5))
-sns.barplot(x=x, y=y)
 
 numbers = list(range(len(flats_2021_df)))
 
@@ -130,5 +125,5 @@ model.score(X_test, y_test)
 
 
 
-with open("../model.pkl", "wb") as f:
+with open("model.pkl", "wb") as f:
   pickle.dump(model,f)
