@@ -1,5 +1,3 @@
-Activate virtual environment
-
 ## Requirements
 
 * Python 3.9.6
@@ -14,6 +12,19 @@ python -m venv .venv
 ```bash
 source .venv/bin/activate
 ```
+
+* Note: Please download csv file as "resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv" before training model
+
+* URL to load download csv file
+```html
+https://data.gov.sg/dataset/resale-flat-prices
+```
+
+#### Create Model:
+```bash
+python model_training/hdb_project.py
+```
+
 #### Running tests:
 
 ```bash
@@ -23,11 +34,6 @@ python -m unittest
 #### Running the server:
 ```bash
 python -m flask run --host=0.0.0.0
-```
-
-URL to load download csv file
-```html
-https://data.gov.sg/dataset/resale-flat-prices
 ```
 
 ### Command to build docker image from dockerfile
@@ -42,5 +48,5 @@ docker run -p 5000:5000 ml-app
 
 ### Example query
 ```html
-make-prediction?storey-range=7&floor-area-sqm=75&remaining-lease=64&town=PUNGGOL
+localhost:5000/make-prediction?storey-range=7&floor-area-sqm=75&remaining-lease=64&town=PUNGGOL
 ```
