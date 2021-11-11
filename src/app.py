@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 random_forest = PredModel("model.pkl")
+random_forest.load_model()
 
 
 @app.route('/')
