@@ -7,7 +7,6 @@ class TestModel(TestCase):
 
     def setUp(self):
         self.pred_model = PredModel('model.pkl')
-        self.pred_model.load_model()
 
     def test_model_should_be_random_forest_regressor(self):
         result = str(type(self.pred_model.model))
