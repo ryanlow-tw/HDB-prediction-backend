@@ -4,3 +4,6 @@
 model.pkl
 __init__.py
 /__pycache__
+*.txt
+*.csv
+.venv
