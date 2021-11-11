@@ -1,7 +1,18 @@
 Activate virtual environment
 
+## Requirements
+
+* Python 3.9.6
+* Docker 20.10.8
+
+
+#### Creating virtual environment
 ```bash
-source ./environment/bin/activate
+python -m venv .venv
+```
+
+```bash
+source .venv/bin/activate
 ```
 #### Running tests:
 
@@ -14,9 +25,9 @@ python -m unittest
 python -m flask run --host=0.0.0.0
 ```
 
-URL to load csv file
+URL to load download csv file
 ```html
-https://docs.google.com/spreadsheets/d/1EkP-9IdQqu-hQfK-e4wf4ne_s5F54mS7BMvNKDR1Nw8/edit?usp=sharing
+https://data.gov.sg/dataset/resale-flat-prices
 ```
 
 ### Command to build docker image from dockerfile
