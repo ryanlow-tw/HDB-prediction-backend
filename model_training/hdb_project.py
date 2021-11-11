@@ -22,24 +22,15 @@ import pickle
 
 """CSV analysis"""
 
+print("Reading data...")
 flats_df = pd.read_csv("resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv")
 
-"""checking null values"""
-
-flats_df.isnull().sum()
-
-"""Check the data types of all columns"""
-
-flats_df.info()
 
 """Let's get the flats only in 2021 because if we predict prices,  we don't want outdated data..."""
-
+print("Cleaning data...")
 flats_2021_df = flats_df[flats_df['month'].str.split('-', expand=True)[0] == "2021"]
 
 """Check whether the unique values are not overlapping"""
-
-sorted(flats_2021_df['storey_range'].unique())
-
 floor_counts = dict(flats_2021_df['storey_range'].value_counts())
 
 x = sorted(list(floor_counts.keys()))
@@ -78,25 +69,18 @@ flats_storey_encoded_df['storey_range'] = flats_2021_df['storey_range'].apply(la
 
 high_floor_indices = flats_2021_df[flats_2021_df['storey_range'] == "13 TO 15"].index
 
-flats_storey_encoded_df[flats_storey_encoded_df['storey_range']== 2].index
-
-flats_storey_encoded_df.loc[high_floor_indices]['storey_range'].value_counts()
-
 years_cleaned_df = flats_storey_encoded_df.copy()
 years_cleaned_df['remaining_lease'] = years_cleaned_df['remaining_lease'].apply(lambda x: x.split()[0])
 years_cleaned_df['remaining_lease'] = years_cleaned_df['remaining_lease'].astype(int)
-
-
 selected_features_df = years_cleaned_df[['town', 'storey_range','floor_area_sqm', 'remaining_lease']]
-
-selected_features_df.info()
 
 X = pd.get_dummies(selected_features_df)
 y = years_cleaned_df['resale_price']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
-
+print("Training data...")
 model = RandomForestRegressor()
 model.fit(X=X_train, y=y_train)
 with open("model.pkl", "wb") as f:
   pickle.dump(model,f)
+print("Training complete!")
