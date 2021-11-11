@@ -43,7 +43,7 @@ docker build -t ml-app .
 
 ### Command to run docker container
 ```bash
-docker run -p 5000:5000 ml-app
+docker run -p 5000:5000 -e FLASK_APP=src/app.py -e PYTHONPATH=/app/src ml-app
 ```
 
 ### Example query
