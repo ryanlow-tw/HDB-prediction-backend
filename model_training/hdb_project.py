@@ -84,5 +84,3 @@ model.fit(X=X_train, y=y_train)
 with open("model.pkl", "wb") as f:
   pickle.dump(model,f)
 print("Training complete!")
-
-print(f"\n\n****Selected model features****\n\n{selected_features_df.dtypes}")
