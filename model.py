@@ -54,7 +54,7 @@ class PredModel:
 
     @staticmethod
     def _get_town_col_number(town):
-        print(town)
+        
         if f"town_{town}" not in PredModel.remaining_column_names:
             raise ValueError(f"{town} is not a valid town name!")
 
