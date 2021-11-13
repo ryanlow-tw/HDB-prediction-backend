@@ -43,12 +43,12 @@ docker build -t ml-app .
 
 ### Command to run docker container
 ```bash
-docker run --name hdb_prediction -p 5000:5000 -e FLASK_APP=src/app.py -e PYTHONPATH=/app/src ml-app
+docker run -p 5000:5000 -e FLASK_APP=src/app.py -e PYTHONPATH=/app/src ml-app
 ```
 
 ### Command to run docker container
 ```bash
-docker stop hdb_prediction
+docker stop <container id>
 ```
 
 ### Example query
